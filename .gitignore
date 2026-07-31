@@ -6,6 +6,7 @@ __pycache__/
 *.egg-info/
 
 .codex/
+AGENTS.md
 .env
 .env.*
 !.env.example
