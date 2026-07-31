@@ -1,0 +1,30 @@
+experiment:
+  name: synthetic_baseline
+  seed: 42
+
+data:
+  dataset: synthetic
+  frames_per_video: 8
+  image_size: 224
+
+encoder:
+  family: open_clip
+  model_name: ViT-B-32
+  pretrained: laion2b_s34b_b79k
+  frozen: true
+
+retrieval:
+  first_stage_top_k: 50
+  similarity: cosine
+
+router:
+  feature_names:
+    - top1_score
+    - top1_top2_margin
+    - score_entropy
+    - score_std
+  initial_margin_threshold: 0.05
+
+runtime:
+  device: cuda
+  precision: fp32
