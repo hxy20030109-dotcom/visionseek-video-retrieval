@@ -7,6 +7,7 @@ __pycache__/
 
 .codex/
 AGENTS.md
+note.md
 .env
 .env.*
 !.env.example

@@ -47,17 +47,20 @@ Verified on 2026-07-31:
 
 ## Day 3
 
-- Read the OpenCLIP model-loading and preprocessing interface.
-- Run one image-text example on the GPU.
-- Record tensor shape, dtype, device, VRAM, and inference time.
+- [x] Read the OpenCLIP model-loading and preprocessing interface.
+- [x] Run one image-text example on the GPU.
+- [x] Verify image and text embeddings have shape `[batch, 512]`.
 
 ## Day 4
 
-- Sample frames from two short, self-owned videos.
-- Encode frames and compare mean pooling with single-frame retrieval.
-- Keep all sample media outside Git unless redistribution is permitted.
+- [x] Generate two synthetic MP4 files for a controlled smoke test.
+- [x] Sample four frames from each video with a reusable project module.
+- [x] Encode frames with OpenCLIP and mean-pool them into video embeddings.
+- [ ] Repeat the pipeline with two short, self-owned videos.
+- [ ] Compare mean pooling with single-frame retrieval.
+- [x] Keep all sample media outside Git unless redistribution is permitted.
 
-## Day 5–7
+## Day 5+
 
 - Prepare the MSR-VTT access checklist and metadata schema.
 - Implement dataset validation before downloading the full corpus.

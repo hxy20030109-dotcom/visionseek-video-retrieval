@@ -7,8 +7,9 @@ Chinese text. It investigates whether a lightweight learned router can send only
 uncertain queries to an expensive temporal reranker while preserving most of the
 retrieval-quality gain.
 
-> Project status: Phase 0 — repository and evaluation foundations. No benchmark
-> results are reported yet.
+> Project status: Phase 1 — reusable video frame sampling and an OpenCLIP
+> retrieval prototype are implemented. No dataset benchmark results are reported
+> yet.
 
 ## Research Question
 
@@ -47,6 +48,14 @@ return result       temporal/caption-aware reranker
 4. English and Chinese evaluation on MSR-VTT and VATEX.
 5. Accuracy-latency analysis with PyTorch and ONNX Runtime.
 
+## Implemented Foundation
+
+- Uniform frame sampling from local video files with OpenCV.
+- Batched tensor output in `[frames, channels, height, width]` format.
+- OpenCLIP image/text embedding prototype on CUDA.
+- Cosine-similarity retrieval, Top-K ranking, metrics, and routing features.
+- Unit tests for retrieval, metrics, routing, and video sampling.
+
 ## Evaluation
 
 Retrieval quality:
@@ -66,15 +75,15 @@ Efficiency:
 
 ```text
 visionseek-video-retrieval/
-├── configs/              # Versioned experiment configuration
-├── data/                 # Instructions only; datasets are never committed
-├── docs/                 # Architecture, experiments, and weekly plans
-├── scripts/              # Environment and experiment entry points
-├── src/visionseek/       # Project implementation
-├── tests/                # Fast unit tests
-├── PROJECT_PLAN.md
-├── REFERENCES.md
-└── pyproject.toml
+|-- configs/              # Versioned experiment configuration
+|-- data/                 # Instructions only; datasets are never committed
+|-- docs/                 # Architecture, experiments, and weekly plans
+|-- scripts/              # Environment and experiment entry points
+|-- src/visionseek/       # Project implementation
+|-- tests/                # Fast unit tests
+|-- PROJECT_PLAN.md
+|-- REFERENCES.md
+`-- pyproject.toml
 ```
 
 ## Quick Start
@@ -92,8 +101,8 @@ python scripts/smoke_test.py
 ```
 
 The project pins the official CUDA 13.0 PyTorch wheels through `pyproject.toml`.
-The project will add OpenCLIP, video decoding, FAISS, and ONNX dependencies only
-when their milestone begins.
+OpenCLIP and OpenCV provide the current embedding and video-decoding foundation.
+FAISS and ONNX Runtime will be added when their milestones begin.
 
 Large datasets and model caches should be placed outside the repository. Copy
 `.env.example` to `.env` and adjust the paths for the local machine.
