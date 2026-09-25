@@ -10,6 +10,8 @@ import numpy as np
 import torch
 from torch import Tensor
 
+SUPPORTED_VIDEO_SUFFIXES = {".avi", ".mkv", ".mov", ".mp4", ".webm"}
+
 
 @dataclass(frozen=True)
 class VideoMetadata:
@@ -24,6 +26,46 @@ class VideoMetadata:
     def duration_seconds(self) -> float:
         """Return video duration in seconds."""
         return self.frame_count / self.fps
+
+
+def discover_video_files(video_dir: str | Path) -> list[Path]:
+    """Return supported video files in a directory, sorted by filename."""
+    directory = Path(video_dir)
+    if not directory.is_dir():
+        raise FileNotFoundError(f"Video directory does not exist: {directory}")
+
+    return sorted(
+        path
+        for path in directory.iterdir()
+        if path.is_file() and path.suffix.lower() in SUPPORTED_VIDEO_SUFFIXES
+    )
+
+
+def probe_video(video_path: str | Path) -> VideoMetadata:
+    """Read and validate basic video metadata without decoding every frame."""
+    path = Path(video_path)
+    if not path.is_file():
+        raise FileNotFoundError(f"Video does not exist: {path}")
+
+    capture = cv2.VideoCapture(str(path))
+    if not capture.isOpened():
+        raise ValueError(f"OpenCV could not open video: {path}")
+
+    frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    fps = float(capture.get(cv2.CAP_PROP_FPS))
+    width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    capture.release()
+
+    if frame_count < 1 or fps <= 0 or width < 1 or height < 1:
+        raise ValueError(f"Video has invalid metadata: {path}")
+
+    return VideoMetadata(
+        frame_count=frame_count,
+        fps=fps,
+        width=width,
+        height=height,
+    )
 
 
 def uniform_frame_indices(frame_count: int, num_frames: int) -> list[int]:

@@ -7,9 +7,8 @@ Chinese text. It investigates whether a lightweight learned router can send only
 uncertain queries to an expensive temporal reranker while preserving most of the
 retrieval-quality gain.
 
-> Project status: Phase 1 — reusable video frame sampling and an OpenCLIP
-> retrieval prototype are implemented. No dataset benchmark results are reported
-> yet.
+> Project status: Phase 1 — the reproducible OpenCLIP mean-pooling baseline has
+> been evaluated on the MSR-VTT 1K-A test split.
 
 ## Research Question
 
@@ -56,6 +55,20 @@ return result       temporal/caption-aware reranker
 - Cosine-similarity retrieval, Top-K ranking, metrics, and routing features.
 - Unit tests for retrieval, metrics, routing, and video sampling.
 
+## Verified Baseline
+
+MSR-VTT 1K-A text-to-video retrieval with one caption per video:
+
+| Encoder | Frames | Aggregation | R@1 | R@5 | R@10 | Median rank |
+|---|---:|---|---:|---:|---:|---:|
+| OpenCLIP ViT-B/32 (OpenAI) | 8 | normalized frame mean | 31.7 | 53.7 | 62.4 | 5 |
+
+Protocol: 1,000 candidate videos, uniformly sampled frames, frozen
+`ViT-B-32-quickgelu`, FP32 inference, and cosine similarity. On an NVIDIA
+GeForce RTX 5070 Ti, video decoding plus frame encoding took 53.68 seconds and
+text encoding took 0.50 seconds. These are feature-extraction totals, not
+online query-latency claims.
+
 ## Evaluation
 
 Retrieval quality:
@@ -98,6 +111,8 @@ uv sync --extra dev
 python scripts/check_environment.py
 pytest
 python scripts/smoke_test.py
+python scripts/cache_msrvtt_embeddings.py
+python scripts/evaluate_msrvtt.py
 ```
 
 The project pins the official CUDA 13.0 PyTorch wheels through `pyproject.toml`.
@@ -106,6 +121,23 @@ FAISS and ONNX Runtime will be added when their milestones begin.
 
 Large datasets and model caches should be placed outside the repository. Copy
 `.env.example` to `.env` and adjust the paths for the local machine.
+
+### MSR-VTT baseline data
+
+The preparation script downloads a community-hosted MSR-VTT archive and keeps
+all raw data outside version control. By default it uses `data/raw/msrvtt`.
+For a separate data drive, set `VISIONSEEK_DATA_ROOT` to the parent dataset
+directory before running the commands:
+
+```powershell
+$env:VISIONSEEK_DATA_ROOT = "D:\datasets"
+python scripts/prepare_msrvtt.py
+python scripts/cache_msrvtt_embeddings.py
+python scripts/evaluate_msrvtt.py
+```
+
+Downloaded videos and generated embeddings must not be committed or
+redistributed. See [data/README.md](data/README.md) for provenance rules.
 
 ## Reproducibility Policy
 

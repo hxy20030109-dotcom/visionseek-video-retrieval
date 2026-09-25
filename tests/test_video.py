@@ -1,6 +1,6 @@
 import pytest
 
-from visionseek.video import VideoMetadata, uniform_frame_indices
+from visionseek.video import VideoMetadata, discover_video_files, uniform_frame_indices
 
 
 def test_uniform_frame_indices_cover_the_complete_video() -> None:
@@ -33,3 +33,13 @@ def test_uniform_frame_indices_reject_invalid_counts(
 def test_video_metadata_duration() -> None:
     metadata = VideoMetadata(frame_count=24, fps=8.0, width=320, height=240)
     assert metadata.duration_seconds == 3.0
+
+
+def test_discover_video_files_filters_and_sorts(tmp_path) -> None:
+    (tmp_path / "b.mp4").touch()
+    (tmp_path / "a.MOV").touch()
+    (tmp_path / "notes.txt").touch()
+
+    discovered = discover_video_files(tmp_path)
+
+    assert [path.name for path in discovered] == ["a.MOV", "b.mp4"]

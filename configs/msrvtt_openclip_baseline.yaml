@@ -1,0 +1,32 @@
+experiment:
+  name: msrvtt_1ka_openclip_mean_pool
+  seed: 42
+
+data:
+  dataset: MSR-VTT 1K-A
+  manifest: data/raw/msrvtt/test_1k/captions.csv
+  frames_per_video: 8
+  image_size: 224
+
+encoder:
+  family: open_clip
+  model_name: ViT-B-32-quickgelu
+  pretrained: openai
+  frozen: true
+
+aggregation:
+  method: normalized_frame_mean
+
+retrieval:
+  similarity: cosine
+  metrics:
+    - R@1
+    - R@5
+    - R@10
+    - mean_rank
+    - median_rank
+
+runtime:
+  device: cuda
+  precision: fp32
+  video_batch_size: 16

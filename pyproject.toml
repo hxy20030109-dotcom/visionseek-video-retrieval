@@ -9,6 +9,7 @@ description = "Cost-aware bilingual text-to-video retrieval"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
+    "huggingface-hub>=1.0,<2",
     "numpy>=2.0,<3",
     "open-clip-torch>=3.3,<4",
     "opencv-python-headless>=5.0,<6",

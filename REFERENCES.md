@@ -12,6 +12,8 @@ This file records external work before any implementation is adapted.
 | [NeighborRetr](https://github.com/zzezze/NeighborRetr) | Optional hubness/hard-negative research reference | Use only after the core router is complete; attribute adapted ideas |
 | [ONNX Runtime examples](https://github.com/microsoft/onnxruntime-inference-examples) | Export and benchmark patterns | Adapt small examples with attribution where required |
 | [Torch-TensorRT](https://github.com/pytorch/TensorRT) | Optional deployment benchmark | Use as a dependency; preserve license notices |
+| [MSR-VTT paper](https://www.microsoft.com/en-us/research/publication/msr-vtt-a-large-video-description-dataset-for-bridging-video-and-language/) | English text-to-video retrieval benchmark | Cite the dataset paper; never commit or redistribute raw videos |
+| [MSR-VTT community mirror](https://huggingface.co/datasets/friedrichor/MSR-VTT) | Local acquisition of the 1K-A videos and annotations | Record provenance; keep all downloaded data outside Git |
 
 ## Attribution procedure
 
